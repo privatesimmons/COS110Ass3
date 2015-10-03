@@ -90,8 +90,8 @@ void Dungeon::readInMaze(string fileName)
 	for (int i = 0; i < worldRows; i++)
 	{
 		maze[i] = new char[worldColumns + 1];
-		maze.
+		mazeFile.getline(maze[i], worldColumns + 1);
 	}
-	//TODO : read in the values
+
 
 }
