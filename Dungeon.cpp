@@ -18,18 +18,24 @@ Dungeon::Dungeon()
 
 Dungeon::Dungeon(unsigned int rows, unsigned int col)
 {
-
+	worldRows = rows;
+	worldColumns = col;
+	maze = new char *[worldRows];
+	for(int i = 0; i < worldRows; i++)
+		maze[i] = new char[worldColumns];
 }
 
 
 Dungeon::Dungeon(string fileName)
 {
-
+	readInMaze(fileName);
 }
 
 Dungeon::~Dungeon()
 {
-
+	for(int i = 0; i < worldRows; i++)
+		delete [] maze[i];
+	delete [] maze;
 }
 
 char Dungeon::getMazeSquare(unsigned int row, unsigned int col) const
