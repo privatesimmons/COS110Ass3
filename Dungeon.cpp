@@ -82,7 +82,7 @@ void Dungeon::readInMaze(string fileName)
 	try
 	{
 		mazeFile.open("mazeExample.txt", ifstream::in);
-		if (!mazeFile.good())
+		if (mazeFile.bad())
 			throw("stones");
 	}
 	catch (...)
@@ -91,7 +91,7 @@ void Dungeon::readInMaze(string fileName)
 	}
 
 	mazeFile >> worldRows >> worldColumns;
-
+	while(mazeFile.get() != '\n');
 	maze = new char *[worldRows];
 	for (unsigned int i = 0; i < worldRows; i++)
 	{
@@ -100,6 +100,7 @@ void Dungeon::readInMaze(string fileName)
 		{
 			maze[i][j] = mazeFile.get();
 		}
+		while(mazeFile.get() != '\n');
 	}
 
 
