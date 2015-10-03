@@ -51,22 +51,22 @@ char Dungeon::getMazeSquare(unsigned int row, unsigned int col) const
 
 unsigned int Dungeon::getWorldRows() const
 {
-
+	return worldRows;
 }
 
 void Dungeon::setWorldRows(unsigned int r)
 {
-
+	worldRows = r;
 }
 
 unsigned int Dungeon::getWorldColumns() const
 {
-
+	return worldColumns;
 }
 
 void Dungeon::setWorldColumns(unsigned int c)
 {
-
+	worldColumns = c;
 }
 
 void Dungeon::readInMaze(string fileName)
