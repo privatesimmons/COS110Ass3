@@ -21,7 +21,7 @@ Dungeon::Dungeon(unsigned int rows, unsigned int col)
 	worldRows = rows;
 	worldColumns = col;
 	maze = new char *[worldRows];
-	for(int i = 0; i < worldRows; i++)
+	for(unsigned int i = 0; i < worldRows; i++)
 		maze[i] = new char[worldColumns];
 }
 
@@ -33,7 +33,7 @@ Dungeon::Dungeon(string fileName)
 
 Dungeon::~Dungeon()
 {
-	for(int i = 0; i < worldRows; i++)
+	for(unsigned int i = 0; i < worldRows; i++)
 		delete [] maze[i];
 	delete [] maze;
 }
@@ -44,12 +44,12 @@ char Dungeon::getMazeSquare(unsigned int row, unsigned int col) const
 	{
 		if (row > worldRows || row < 0 || col > worldColumns || col < 0)
 		{
-			throw ("Invalid cell in dungeon.");
+			throw ("rocks");
 		}
 	}
-	catch (string message)
+	catch (...)
 	{
-		catcher(message);
+		catcher("Invalid cell in dungeon.");
 	}
 
 	return maze[row][col];
@@ -77,26 +77,29 @@ void Dungeon::setWorldColumns(unsigned int c)
 
 void Dungeon::readInMaze(string fileName)
 {
-	fstream mazeFile;
+	ifstream mazeFile;
 
 	try
 	{
-		mazeFile.open(fileName, ios::in);
-		if (mazeFile.fail())
-			throw("The file does not exist.");
+		mazeFile.open("mazeExample.txt", ifstream::in);
+		if (!mazeFile.good())
+			throw("stones");
 	}
-	catch (string message)
+	catch (...)
 	{
-		catcher(message);
+		catcher("The file does not exist.");
 	}
 
 	mazeFile >> worldRows >> worldColumns;
 
 	maze = new char *[worldRows];
-	for (int i = 0; i < worldRows; i++)
+	for (unsigned int i = 0; i < worldRows; i++)
 	{
-		maze[i] = new char[worldColumns + 1];
-		mazeFile.getline(maze[i], worldColumns + 1);
+		maze[i] = new char[worldColumns];
+		for(int j = 0; j < worldColumns; j++)
+		{
+			maze[i][j] = mazeFile.get();
+		}
 	}
 
 
