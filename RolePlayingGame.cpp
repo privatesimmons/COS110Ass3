@@ -141,13 +141,14 @@ void RolePlayingGame::initializeMonsters(unsigned int seed, unsigned int numMon)
     for(unsigned int i = 0; i < numMon; i++)
     {
 
-        do
-        {
-            row = ran.nextInt() / 1000;
-            col = ran2.nextInt() / 1000;
-        }
-        while (dungeon.getMazeSquare(row, col) != ' ' || creatures[row][col] != 0);
-
+		do
+		{
+			row = ran.nextInt() / 1000;
+			col = ran2.nextInt() / 1000;
+			if(dungeon.getMazeSquare(row, col) == ' ' && creatures[row][col] == 0)
+				break;
+		}
+		while(true);
 
         // The seg faults happen here
         creatures[row][col] = &monsters[i];
@@ -198,14 +199,14 @@ void RolePlayingGame::initializeFirstAidKits(unsigned int seed, unsigned int num
 
 	for (unsigned int i = 0; i < numKits; i++)
 	{
-
 		do
 		{
 			row = ran.nextInt() / 1000;
 			col = ran2.nextInt() / 1000;
+			if(dungeon.getMazeSquare(row, col) == ' ' && creatures[row][col] == 0)
+				break;
 		}
-		while (dungeon.getMazeSquare(row, col) != ' ' || creatures[row][col] != 0);
-
+		while(true);
 		creatures[row][col] = &firstAidKits[i];
 	}
 }
@@ -260,9 +261,10 @@ void RolePlayingGame::initializePotions(unsigned int seed, unsigned int numPotio
 		{
 			row = ran.nextInt() / 1000;
 			col = ran2.nextInt() / 1000;
+			if(dungeon.getMazeSquare(row, col) == ' ' && creatures[row][col] == 0)
+				break;
 		}
-		while (dungeon.getMazeSquare(row, col) != ' ' || creatures[row][col] != 0);
-
+		while(true);
 		creatures[row][col] = &potions[i];
 	}
 }
