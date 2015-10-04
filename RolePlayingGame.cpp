@@ -9,23 +9,23 @@
 using namespace std;
 
 
-//RolePlayingGame::RolePlayingGame(unsigned int seed, unsigned int nrMon, unsigned int nrKits, unsigned int nrPotions, unsigned int boost, unsigned int mhealth)
-//{
-//    //initialize the dungeon to be empty
-//    this->dungeon.readInMaze("mazeExample.txt");
-//
-//    initializeCreatures();
-//
-//    initializeHero(seed);
-//
-//    initializeMonsters(seed, nrMon);
-//
-//    initializeFirstAidKits(seed, nrKits, boost);
-//
-//    initializePotions(seed, nrPotions);
-//
-//    this->maxHealth = mhealth;
-//}
+RolePlayingGame::RolePlayingGame(unsigned int seed, unsigned int nrMon, unsigned int nrKits, unsigned int nrPotions, unsigned int boost, unsigned int mhealth)
+{
+    //initialize the dungeon to be empty
+    this->dungeon.readInMaze("mazeExample.txt");
+
+    initializeCreatures();
+
+    initializeHero(seed);
+
+    initializeMonsters(seed, nrMon);
+
+    initializeFirstAidKits(seed, nrKits, boost);
+
+    initializePotions(seed, nrPotions);
+
+    this->maxHealth = mhealth;
+}
 
 RolePlayingGame::~RolePlayingGame()
 {
@@ -90,10 +90,10 @@ void RolePlayingGame::setNrPotions(unsigned int p)
 void RolePlayingGame::initializeCreatures()
 {
     creatures = new Creature **[dungeon.getWorldRows()];
-    for(int i = 0; i < dungeon.getWorldRows(); i++)
+    for(unsigned int i = 0; i < dungeon.getWorldRows(); i++)
     {
         creatures[i] = new Creature *[dungeon.getWorldColumns()];
-        for(int j = 0; j < dungeon.getWorldColumns(); j++)
+        for(unsigned int j = 0; j < dungeon.getWorldColumns(); j++)
         {
             creatures[i][j] = 0;
         }
@@ -138,7 +138,7 @@ void RolePlayingGame::initializeMonsters(unsigned int seed, unsigned int numMon)
 	RandomNumberGenerator ran(seed, (this->dungeon.getWorldRows() - 2)*1000);
 	RandomNumberGenerator ran2(seed, (this->dungeon.getWorldColumns() - 2) * 1000);
 
-    for(int i = 0; i < numMon; i++)
+    for(unsigned int i = 0; i < numMon; i++)
     {
 
         do
@@ -146,7 +146,7 @@ void RolePlayingGame::initializeMonsters(unsigned int seed, unsigned int numMon)
             row = ran.nextInt() / 1000;
             col = ran2.nextInt() / 1000;
         }
-        while (dungeon.getMazeSquare(row, col) != ' ' && creatures[row][col] != 0);
+        while (dungeon.getMazeSquare(row, col) != ' ' || creatures[row][col] != 0);
 
 
         // The seg faults happen here
@@ -196,7 +196,7 @@ void RolePlayingGame::initializeFirstAidKits(unsigned int seed, unsigned int num
 	RandomNumberGenerator ran(seed, (this->dungeon.getWorldRows() - 2) * 1000);
 	RandomNumberGenerator ran2(seed, (this->dungeon.getWorldColumns() - 2) * 1000);
 
-	for (int i = 0; i < numKits; i++)
+	for (unsigned int i = 0; i < numKits; i++)
 	{
 
 		do
@@ -204,7 +204,7 @@ void RolePlayingGame::initializeFirstAidKits(unsigned int seed, unsigned int num
 			row = ran.nextInt() / 1000;
 			col = ran2.nextInt() / 1000;
 		}
-		while (dungeon.getMazeSquare(row, col) != ' ' && creatures[row][col] != 0);
+		while (dungeon.getMazeSquare(row, col) != ' ' || creatures[row][col] != 0);
 
 		creatures[row][col] = &firstAidKits[i];
 	}
@@ -249,7 +249,7 @@ void RolePlayingGame::initializePotions(unsigned int seed, unsigned int numPotio
 	RandomNumberGenerator ran(seed, (this->dungeon.getWorldRows() - 2) * 1000);
 	RandomNumberGenerator ran2(seed, (this->dungeon.getWorldColumns() - 2) * 1000);
 
-	for (int i = 0; i < numPotions * 2; i++)
+	for (unsigned int i = 0; i < numPotions * 2; i++)
 	{
 		if(i % 2 == 0)
 			potions[i].setHealth(NORMAL);
@@ -261,7 +261,7 @@ void RolePlayingGame::initializePotions(unsigned int seed, unsigned int numPotio
 			row = ran.nextInt() / 1000;
 			col = ran2.nextInt() / 1000;
 		}
-		while (dungeon.getMazeSquare(row, col) != ' ' && creatures[row][col] != 0);
+		while (dungeon.getMazeSquare(row, col) != ' ' || creatures[row][col] != 0);
 
 		creatures[row][col] = &potions[i];
 	}
@@ -277,13 +277,15 @@ void RolePlayingGame::initializeHero(unsigned int seed)
     {
         row = ran.nextInt() / 1000;
         col = ran2.nextInt() / 1000;
+	    if(dungeon.getMazeSquare(row, col) == ' ' && creatures[row][col] == 0)
+		    break;
     }
-    while(dungeon.getMazeSquare(row, col) != ' ' && creatures[row][col] != 0);
+    while(true);
 // Why we no use dungeon to store hero >_<
     creatures[row][col] = &hero;
 }
-        
-vector<int> RolePlayingGame::locateCreature(Creature* creature)
-{
-    
-}
+
+//vector<int> RolePlayingGame::locateCreature(Creature* creature)
+//{
+//
+//}
