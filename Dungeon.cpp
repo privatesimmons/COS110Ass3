@@ -1,19 +1,16 @@
 #include "Dungeon.h"
 #include <iostream>
 #include <fstream>
-
+#include <cstdlib>
 
 using namespace std;
 
-void catcher(string message)
-{
-	cout << endl << message << " Exiting the program." << endl;
-	terminate();
-}
 
 Dungeon::Dungeon()
 {
-
+	worldRows = 0;
+	worldColumns = 0;
+	maze = 0;
 }
 
 Dungeon::Dungeon(unsigned int rows, unsigned int col)
@@ -42,14 +39,15 @@ char Dungeon::getMazeSquare(unsigned int row, unsigned int col) const
 {
 	try
 	{
-		if (row > worldRows || row < 0 || col > worldColumns || col < 0)
+		if (row > worldRows  || col > worldColumns )
 		{
 			throw ("rocks");
 		}
 	}
 	catch (...)
 	{
-		catcher("Invalid cell in dungeon.");
+		cout << endl << "Invalid cell in dungeon." << " Exiting the game." << endl;
+		exit(EXIT_FAILURE);
 	}
 
 	return maze[row][col];
@@ -81,13 +79,14 @@ void Dungeon::readInMaze(string fileName)
 
 	try
 	{
-		mazeFile.open("mazeExample.txt", ifstream::in);
-		if (mazeFile.bad())
+		mazeFile.open(fileName.c_str(), ios::in);
+		if (!mazeFile)
 			throw("stones");
 	}
 	catch (...)
 	{
-		catcher("The file does not exist.");
+		cout << endl << "The file does not exist." << " Exiting the program." << endl;
+		exit(EXIT_FAILURE);
 	}
 
 	mazeFile >> worldRows >> worldColumns;
@@ -95,12 +94,22 @@ void Dungeon::readInMaze(string fileName)
 	maze = new char *[worldRows];
 	for (unsigned int i = 0; i < worldRows; i++)
 	{
-		maze[i] = new char[worldColumns];
-		for(int j = 0; j < worldColumns; j++)
+		maze[i] = new char[worldColumns + 1];
+		char temp = 0;
+		unsigned int j = 0;
+		while(true)
 		{
-			maze[i][j] = mazeFile.get();
+			mazeFile.get(temp);
+			if(temp == '\n')
+				break;
+
+			maze[i][j++] = temp;
 		}
-		while(mazeFile.get() != '\n');
+		while(j < worldColumns)
+		{
+			maze[i][j++] = ' ';
+		}
+
 	}
 
 
