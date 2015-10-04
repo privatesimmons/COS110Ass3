@@ -4,7 +4,7 @@
 using namespace std;
 
 int main() {
-    RolePlayingGame game(20, 10, 5, 5, 8, 30);  //change values here to test
+    RolePlayingGame game(20, 11, 5, 5, 8, 30);  //change values here to test
     bool gameOver = false;
     
     do
