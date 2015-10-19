@@ -112,24 +112,25 @@ void RolePlayingGame::initializeMonsters(unsigned int seed, unsigned int numMon)
         catch (...)
         {
             //sorry
-	        unsigned int temp = numMon;
+	        int temp = numMon;
 
 
                 cout << endl << "Too many monsters requested. Maximum 10 allowed." << endl;
-                cout << "How many monsters should be added:" << endl;
+                cout << "How many monsters should be added:" ;
             do{
+
                 cin >> temp;
-                if (!temp)
+                if (!temp || temp < 0)
                 {
-                    cout <<  endl << "Enter an integer from 1 to 10. How many monsters should be added: " << endl;
+                    cout <<  endl << "Enter an integer from 1 to 10. How many monsters should be added: " ;
 	                cin.clear();
 	                cin.ignore(INT_MAX, '\n');
                 }
-            } while(!temp);
+            } while(!temp || temp < 0);
             numMon = temp;
         }
 
-    } while(numMon >= 11);
+    } while(numMon > 10);
 
     monsters = new Creature[numMon];
     nrMonsters = numMon;
@@ -168,21 +169,29 @@ void RolePlayingGame::initializeFirstAidKits(unsigned int seed, unsigned int num
 		catch (...)
 		{
 			//sorry
-			unsigned int temp = numKits;
+			 int temp = numKits;
 
 
 			cout << endl << "Too many first aid kits requested. Maximum " << nrMonsters / 2 << " is allowed." << endl;
 			cout << "How many kits should be added:" << endl;
 			do
 			{
-				cin >> temp;
-				if (!temp)
+				try
+				{
+					cin >> temp;
+					if (!temp)
+					{
+						throw("a bag of dicks");
+					}
+				}
+				catch(...)
 				{
 					cout << endl << "Enter an integer from 1 to " << nrMonsters / 2
 					<< ". How many first aid kits should be added: " << endl;
 					cin.clear();
-					cin.ignore(INT_MAX, '\n');
+					cin.ignore(INT_MAX, ' ');
 				}
+
 			} while (!temp);
 			numKits = temp;
 		}
